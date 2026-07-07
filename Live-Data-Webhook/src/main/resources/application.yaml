@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: Live-Data-Webhook
+sungrow:
+  webhook:
+    secret: SEC_YOUR_SECRET_HERE
+
