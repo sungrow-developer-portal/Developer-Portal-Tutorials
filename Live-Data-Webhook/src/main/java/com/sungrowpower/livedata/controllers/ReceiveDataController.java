@@ -23,6 +23,11 @@ public class ReceiveDataController {
     private WebhookSignUtil signUtil;
 
     @PostMapping("/receive")
+    public void receiveDataWithoutSign(@RequestBody String body) {
+        log.info("receive webhook msg: {}", body);
+    }
+
+    @PostMapping("/receive/sign")
     public Map<String, Object> receiveWebhook(
             @RequestParam(value = "timestamp", required = false) Long timestamp,
             @RequestParam(value = "sign", required = false) String sign,
