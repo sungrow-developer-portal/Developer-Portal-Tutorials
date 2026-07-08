@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: Live-Data-MQTT
+
+sungrow:
+  mqtt:
+    clientId: Your-MQTT-ClientId
+    host: api.isolarcloud.com
+    port: 18889
+    username: Your-MQTT-Username
+    password: Your-MQTT-Password
+    topics: Your-MQTT-Topics
+    rsa: Your-MQTT-Encrypt-RSA
