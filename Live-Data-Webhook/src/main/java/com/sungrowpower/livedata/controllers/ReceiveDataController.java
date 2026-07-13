@@ -22,6 +22,11 @@ public class ReceiveDataController {
     @Autowired
     private WebhookSignUtil signUtil;
 
+    @PostMapping("/test")
+    public String testOk() {
+        return "success";
+    }
+
     @PostMapping("/receive")
     public void receiveDataWithoutSign(@RequestBody String body) {
         log.info("receive webhook msg: {}", body);
