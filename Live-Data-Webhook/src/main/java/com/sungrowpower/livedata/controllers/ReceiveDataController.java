@@ -29,13 +29,13 @@ public class ReceiveDataController {
 
     @PostMapping("/receive/sign")
     public void receiveWebhook(
-            @RequestParam(value = "timestamp", required = false) Long timestamp,
+            @RequestParam(value = "timestamp", required = false) String timestamp,
             @RequestParam(value = "sign", required = false) String sign,
             @RequestBody String body) {
 
         try {
             if (timestamp != null && sign != null) {
-                boolean isValid = signUtil.verifySign(timestamp, sign);
+                boolean isValid = signUtil.verifySign(Long.valueOf(timestamp), sign);
                 if (!isValid) {
                     log.warn("timestamp={}, sign={}", timestamp, sign);
                 }
