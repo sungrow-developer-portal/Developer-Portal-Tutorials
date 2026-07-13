@@ -4,6 +4,7 @@ import com.sungrowpower.livedata.utils.WebhookSignUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,36 +23,34 @@ public class ReceiveDataController {
     @Autowired
     private WebhookSignUtil signUtil;
 
-    @PostMapping("/test")
-    public String testOk() {
-        return "success";
-    }
-
     @PostMapping("/receive")
     public void receiveDataWithoutSign(@RequestBody String body) {
         log.info("receive webhook msg: {}", body);
     }
 
     @PostMapping("/receive/sign")
-    public void receiveWebhook(
+    public int receiveWebhook(
             @RequestParam(value = "timestamp", required = false) String timestamp,
             @RequestParam(value = "sign", required = false) String sign,
             @RequestBody String body) {
-
+        int status = HttpStatus.OK.value();
         try {
             if (timestamp != null && sign != null) {
                 boolean isValid = signUtil.verifySign(Long.valueOf(timestamp), sign);
                 if (!isValid) {
                     log.warn("timestamp={}, sign={}", timestamp, sign);
+                    status =  HttpStatus.BAD_REQUEST.value();
+                    return status;
                 }
                 log.info("sign verify success");
             }
 
             log.info("receive webhook msg: {}", body);
 
-
         } catch (Exception e) {
             log.error("process web msg fail", e);
+            status =  HttpStatus.INTERNAL_SERVER_ERROR.value();
         }
+        return status;
     }
 }
