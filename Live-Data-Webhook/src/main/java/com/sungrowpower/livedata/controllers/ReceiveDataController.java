@@ -28,21 +28,16 @@ public class ReceiveDataController {
     }
 
     @PostMapping("/receive/sign")
-    public Map<String, Object> receiveWebhook(
+    public void receiveWebhook(
             @RequestParam(value = "timestamp", required = false) Long timestamp,
             @RequestParam(value = "sign", required = false) String sign,
             @RequestBody String body) {
-
-        Map<String, Object> response = new HashMap<>();
 
         try {
             if (timestamp != null && sign != null) {
                 boolean isValid = signUtil.verifySign(timestamp, sign);
                 if (!isValid) {
                     log.warn("timestamp={}, sign={}", timestamp, sign);
-                    response.put("errcode", 40001);
-                    response.put("errmsg", "fail");
-                    return response;
                 }
                 log.info("sign verify success");
             }
@@ -50,14 +45,8 @@ public class ReceiveDataController {
             log.info("receive webhook msg: {}", body);
 
 
-            response.put("errcode", 0);
-            response.put("errmsg", "ok");
         } catch (Exception e) {
             log.error("process web msg fail", e);
-            response.put("errcode", 500);
-            response.put("errmsg", "fail: " + e.getMessage());
         }
-
-        return response;
     }
 }
